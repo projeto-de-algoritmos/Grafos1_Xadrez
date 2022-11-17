@@ -9,7 +9,9 @@ Tema:
 | 18/0017870  |  Giulia Lobo Barros |
 
 ## Sobre 
-Descreva os objetivos do seu projeto e como ele funciona. 
+O objetivo do nosso projeto é identificar, a cada jogada de uma peça de xadrez, a distância para cada possível próxima posição que aquela peça possa ocupar.
+
+Ele funciona da seguinte forma:
 
 ## Screenshots
 Adicione 3 ou mais screenshots do projeto em funcionamento.
