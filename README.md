@@ -17,8 +17,8 @@ Ele funciona da seguinte forma:
 Adicione 3 ou mais screenshots do projeto em funcionamento.
 
 ## Instalação 
-**Linguagem**: xxxxxx<br>
-**Framework**: (caso exista)<br>
+**Linguagem**: <img src="https://img.icons8.com/color/48/null/javascript--v1.png"/><br/>
+**Framework**: <img src="https://img.icons8.com/office/16/null/react.png"/><br/>
 Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
 
 ## Uso 
