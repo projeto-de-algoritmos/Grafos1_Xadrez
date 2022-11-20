@@ -6,8 +6,7 @@ import { Chessboard } from 'react-chessboard';
 export default function App({ boardWidth }) {
   const chessboardRef = useRef();
   const [game, setGame] = useState(new Chess());
-
-
+  const [moveFrom, setMoveFrom] = useState('');
   const [rightClickedSquares, setRightClickedSquares] = useState({});
   const [moveSquares, setMoveSquares] = useState({});
   const [optionSquares, setOptionSquares] = useState({});
