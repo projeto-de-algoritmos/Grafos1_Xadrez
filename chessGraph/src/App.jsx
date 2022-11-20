@@ -7,19 +7,18 @@ export default function App({ boardWidth }) {
   const chessboardRef = useRef();
   const [game, setGame] = useState(new Chess());
   const [moveFrom, setMoveFrom] = useState('');
-  const [rightClickedSquares, setRightClickedSquares] = useState({});
   const [moveSquares, setMoveSquares] = useState({});
   const [optionSquares, setOptionSquares] = useState({});
+  const [rightClickedSquares, setRightClickedSquares] = useState({});
 
   function safeGameMutate(modify) {
     setGame((g) => {
-      const update = { ...g };
+      const update = g ;
       modify(update);
       return update;
     });
   }
 
-  //Mostra as opções disponíveis de movimento para o quadrado selecionado
   function getMoveOptions(square) {
     const moves = game.moves({
       square,
@@ -46,75 +45,50 @@ export default function App({ boardWidth }) {
     setOptionSquares(newSquares);
   }
 
-  //Função que movimenta uma peça no tabuleiro
-  function makeAMove(move) {
-    const gameCopy = game;
-    const result = gameCopy.move(move);
-    setGame(gameCopy);
-    return result;
-  }
-
-  //Função que movimenta randomicamente uma peça no tabuleiro
   function makeRandomMove() {
     const possibleMoves = game.moves();
-
-    if (game.game_over() || game.in_draw() || possibleMoves.length === 0)
+    if(game.isGameOver() || game.isDraw() || possibleMoves.length === 0)
       return;
-
     const randomIndex = Math.floor(Math.random() * possibleMoves.length);
-    makeAMove(possibleMoves[randomIndex]);
+    safeGameMutate((game) => {
+      game.move(possibleMoves[randomIndex]);
+    });
   }
 
-  //Função que dispara em um clique em um quadrado
+  //Caso o jogador clique em algum quadrado, movimentar as peças
   function onSquareClick(square) {
-    setRightClickedSquares({});
 
-    function resetFirstMove(square) {
+    //Função que altera a variável moveFrom para ter um "histórico" de onde o jogador clicou
+    function resetFirstMove(square){
       setMoveFrom(square);
       getMoveOptions(square);
     }
 
-    // from square
-    if (!moveFrom) {
+    //Caso seja a primeira seleção da peça
+    if(!moveFrom){
       resetFirstMove(square);
       return;
     }
 
-    // attempt to make move
     const gameCopy = game;
-    const move = gameCopy.move({
-      from: moveFrom,
-      to: square,
-      promotion: 'q' // always promote to a queen for example simplicity
-    });
+    const move = gameCopy.move({from: moveFrom, to: square});
     setGame(gameCopy);
 
-    // if invalid, setMoveFrom and getMoveOptions
-    if (move === null) {
+    //Caso a movimentação seja inválida
+    if(move === null){
+      console.log('Movimentação inválida!');
       resetFirstMove(square);
       return;
     }
 
-    setTimeout(makeRandomMove, 300);
+    makeRandomMove();
     setMoveFrom('');
     setOptionSquares({});
   }
 
-  //Função que dispara quando clicar com o botão direito em um quadrado
   function onSquareRightClick(square) {
-    const colour = 'rgba(0, 0, 255, 0.4)';
-    setRightClickedSquares({
-      ...rightClickedSquares,
-      [square]:
-        rightClickedSquares[square] && rightClickedSquares[square].backgroundColor === colour
-          ? undefined
-          : { backgroundColor: colour }
-    });
+    console.log(square);
   }
-
-  //Funçao que dispara sempre que o jogador clicar em uma peça
-  // function onClick()
-
   // console.log(game.get('a2')); //Retorna a peça que está na posição clicada
   // console.log(game.moves({square: 'a3'})); //Retorna a lista de possíveis movimentos no quadrado selecionado
 
