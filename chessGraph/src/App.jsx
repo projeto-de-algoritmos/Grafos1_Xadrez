@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 
-export default function App() {
+export default function App({ boardWidth }) {
   const chessboardRef = useRef();
   const [game, setGame] = useState(new Chess());
 
