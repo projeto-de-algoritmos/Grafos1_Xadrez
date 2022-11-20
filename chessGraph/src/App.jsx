@@ -163,33 +163,6 @@ export default function App({ boardWidth }) {
                 ...rightClickedSquares
               }}
               ref={chessboardRef} />
-            <div className="buttons">
-              <button
-                className="rc-button"
-                onClick={() => {
-                  safeGameMutate((game) => {
-                    game.reset();
-                  });
-                  chessboardRef.current.clearPremoves();
-                  setMoveSquares({});
-                  setRightClickedSquares({});
-                }}
-              >
-                Reset
-              </button>
-              <button
-                className="rc-button"
-                onClick={() => {
-                  safeGameMutate((game) => {
-                    game.undo();
-                  });
-                  chessboardRef.current.clearPremoves();
-                  setMoveSquares({});
-                }}
-              >
-                Undo
-              </button>
-            </div>
           </div>
           <div>
             <h2>{nomePeca}</h2>
