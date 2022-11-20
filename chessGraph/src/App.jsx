@@ -2,8 +2,9 @@ import './App.css';
 import { useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
+import { useEffect } from 'react';
 
-export default function App({ boardWidth }) {
+export default function App() {
   const chessboardRef = useRef();
   const [game, setGame] = useState(new Chess());
   const [moveFrom, setMoveFrom] = useState('');
@@ -21,6 +22,19 @@ export default function App({ boardWidth }) {
     g: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
     h: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 }
   })
+  const [boardSize, setBoardSize] = useState(window.innerWidth/2.5);
+
+  useEffect(() => {
+    function handleBoardResize() {
+      setBoardSize(window.innerWidth/2.5);
+    }
+
+    window.addEventListener('resize', handleBoardResize);
+
+    return () => {
+      window.removeEventListener('resize', handleBoardResize);
+    }
+  }, []);
 
   let pecaSelecionada;
   let nomesPecas = {
@@ -146,131 +160,127 @@ export default function App({ boardWidth }) {
 
   return (
     <div className="App">
-      <div className="screen">
-        <div className="game">
-          <div className="board">
-            <Chessboard
-              id="ClickToMove"
-              animationDuration={200}
-              arePiecesDraggable={false}
-              boardWidth={boardWidth} align content css não centraliza
-              position={game.fen()}
-              onSquareClick={onSquareClick}
-              onSquareRightClick={onSquareRightClick}
-              customSquareStyles={{
-                ...moveSquares,
-                ...optionSquares,
-                ...rightClickedSquares
-              }}
-              ref={chessboardRef} />
-          </div>
-          <div>
-            <h2>{nomePeca}</h2>
-            <table>
-              <tbody>
-                <tr>
-                  <td> </td>
-                  <td>1</td>
-                  <td>2</td>
-                  <td>3</td>
-                  <td>4</td>
-                  <td>5</td>
-                  <td>6</td>
-                  <td>7</td>
-                  <td>8</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>{posicoes['a']['1']}</td>
-                  <td>{posicoes['a']['2']}</td>
-                  <td>{posicoes['a']['3']}</td>
-                  <td>{posicoes['a']['4']}</td>
-                  <td>{posicoes['a']['5']}</td>
-                  <td>{posicoes['a']['6']}</td>
-                  <td>{posicoes['a']['7']}</td>
-                  <td>{posicoes['a']['8']}</td>
-                </tr>
-                <tr>
-                  <td>b</td>
-                  <td>{posicoes['b']['1']}</td>
-                  <td>{posicoes['b']['2']}</td>
-                  <td>{posicoes['b']['3']}</td>
-                  <td>{posicoes['b']['4']}</td>
-                  <td>{posicoes['b']['5']}</td>
-                  <td>{posicoes['b']['6']}</td>
-                  <td>{posicoes['b']['7']}</td>
-                  <td>{posicoes['b']['8']}</td>
-                </tr>
-                <tr>
-                  <td>c</td>
-                  <td>{posicoes['c']['1']}</td>
-                  <td>{posicoes['c']['2']}</td>
-                  <td>{posicoes['c']['3']}</td>
-                  <td>{posicoes['c']['4']}</td>
-                  <td>{posicoes['c']['5']}</td>
-                  <td>{posicoes['c']['6']}</td>
-                  <td>{posicoes['c']['7']}</td>
-                  <td>{posicoes['c']['8']}</td>
-                </tr>
-                <tr>
-                  <td>d</td>
-                  <td>{posicoes['d']['1']}</td>
-                  <td>{posicoes['d']['2']}</td>
-                  <td>{posicoes['d']['3']}</td>
-                  <td>{posicoes['d']['4']}</td>
-                  <td>{posicoes['d']['5']}</td>
-                  <td>{posicoes['d']['6']}</td>
-                  <td>{posicoes['d']['7']}</td>
-                  <td>{posicoes['d']['8']}</td>
-                </tr>
-                <tr>
-                  <td>e</td>
-                  <td>{posicoes['e']['1']}</td>
-                  <td>{posicoes['e']['2']}</td>
-                  <td>{posicoes['e']['3']}</td>
-                  <td>{posicoes['e']['4']}</td>
-                  <td>{posicoes['e']['5']}</td>
-                  <td>{posicoes['e']['6']}</td>
-                  <td>{posicoes['e']['7']}</td>
-                  <td>{posicoes['e']['8']}</td>
-                </tr>
-                <tr>
-                  <td>f</td>
-                  <td>{posicoes['f']['1']}</td>
-                  <td>{posicoes['f']['2']}</td>
-                  <td>{posicoes['f']['3']}</td>
-                  <td>{posicoes['f']['4']}</td>
-                  <td>{posicoes['f']['5']}</td>
-                  <td>{posicoes['f']['6']}</td>
-                  <td>{posicoes['f']['7']}</td>
-                  <td>{posicoes['f']['8']}</td>
-                </tr>
-                <tr>
-                  <td>g</td>
-                  <td>{posicoes['g']['1']}</td>
-                  <td>{posicoes['g']['2']}</td>
-                  <td>{posicoes['g']['3']}</td>
-                  <td>{posicoes['g']['4']}</td>
-                  <td>{posicoes['g']['5']}</td>
-                  <td>{posicoes['g']['6']}</td>
-                  <td>{posicoes['g']['7']}</td>
-                  <td>{posicoes['g']['8']}</td>
-                </tr>
-                <tr>
-                  <td>h</td>
-                  <td>{posicoes['h']['1']}</td>
-                  <td>{posicoes['h']['2']}</td>
-                  <td>{posicoes['h']['3']}</td>
-                  <td>{posicoes['h']['4']}</td>
-                  <td>{posicoes['h']['5']}</td>
-                  <td>{posicoes['h']['6']}</td>
-                  <td>{posicoes['h']['7']}</td>
-                  <td>{posicoes['h']['8']}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div className="board">
+        <Chessboard
+          className="oi"
+          animationDuration={200}
+          boardWidth={boardSize}
+          arePiecesDraggable={false}
+          position={game.fen()}
+          onSquareClick={onSquareClick}
+          onSquareRightClick={onSquareRightClick}
+          customSquareStyles={{
+            ...moveSquares,
+            ...optionSquares,
+            ...rightClickedSquares
+          }}
+          ref={chessboardRef} />
+      </div>
+      <div>
+        <h2>{nomePeca}</h2>
+        <table>
+          <tbody>
+            <tr>
+              <td> </td>
+              <td>1</td>
+              <td>2</td>
+              <td>3</td>
+              <td>4</td>
+              <td>5</td>
+              <td>6</td>
+              <td>7</td>
+              <td>8</td>
+            </tr>
+            <tr>
+              <td>a</td>
+              <td>{posicoes['a']['1']}</td>
+              <td>{posicoes['a']['2']}</td>
+              <td>{posicoes['a']['3']}</td>
+              <td>{posicoes['a']['4']}</td>
+              <td>{posicoes['a']['5']}</td>
+              <td>{posicoes['a']['6']}</td>
+              <td>{posicoes['a']['7']}</td>
+              <td>{posicoes['a']['8']}</td>
+            </tr>
+            <tr>
+              <td>b</td>
+              <td>{posicoes['b']['1']}</td>
+              <td>{posicoes['b']['2']}</td>
+              <td>{posicoes['b']['3']}</td>
+              <td>{posicoes['b']['4']}</td>
+              <td>{posicoes['b']['5']}</td>
+              <td>{posicoes['b']['6']}</td>
+              <td>{posicoes['b']['7']}</td>
+              <td>{posicoes['b']['8']}</td>
+            </tr>
+            <tr>
+              <td>c</td>
+              <td>{posicoes['c']['1']}</td>
+              <td>{posicoes['c']['2']}</td>
+              <td>{posicoes['c']['3']}</td>
+              <td>{posicoes['c']['4']}</td>
+              <td>{posicoes['c']['5']}</td>
+              <td>{posicoes['c']['6']}</td>
+              <td>{posicoes['c']['7']}</td>
+              <td>{posicoes['c']['8']}</td>
+            </tr>
+            <tr>
+              <td>d</td>
+              <td>{posicoes['d']['1']}</td>
+              <td>{posicoes['d']['2']}</td>
+              <td>{posicoes['d']['3']}</td>
+              <td>{posicoes['d']['4']}</td>
+              <td>{posicoes['d']['5']}</td>
+              <td>{posicoes['d']['6']}</td>
+              <td>{posicoes['d']['7']}</td>
+              <td>{posicoes['d']['8']}</td>
+            </tr>
+            <tr>
+              <td>e</td>
+              <td>{posicoes['e']['1']}</td>
+              <td>{posicoes['e']['2']}</td>
+              <td>{posicoes['e']['3']}</td>
+              <td>{posicoes['e']['4']}</td>
+              <td>{posicoes['e']['5']}</td>
+              <td>{posicoes['e']['6']}</td>
+              <td>{posicoes['e']['7']}</td>
+              <td>{posicoes['e']['8']}</td>
+            </tr>
+            <tr>
+              <td>f</td>
+              <td>{posicoes['f']['1']}</td>
+              <td>{posicoes['f']['2']}</td>
+              <td>{posicoes['f']['3']}</td>
+              <td>{posicoes['f']['4']}</td>
+              <td>{posicoes['f']['5']}</td>
+              <td>{posicoes['f']['6']}</td>
+              <td>{posicoes['f']['7']}</td>
+              <td>{posicoes['f']['8']}</td>
+            </tr>
+            <tr>
+              <td>g</td>
+              <td>{posicoes['g']['1']}</td>
+              <td>{posicoes['g']['2']}</td>
+              <td>{posicoes['g']['3']}</td>
+              <td>{posicoes['g']['4']}</td>
+              <td>{posicoes['g']['5']}</td>
+              <td>{posicoes['g']['6']}</td>
+              <td>{posicoes['g']['7']}</td>
+              <td>{posicoes['g']['8']}</td>
+            </tr>
+            <tr>
+              <td>h</td>
+              <td>{posicoes['h']['1']}</td>
+              <td>{posicoes['h']['2']}</td>
+              <td>{posicoes['h']['3']}</td>
+              <td>{posicoes['h']['4']}</td>
+              <td>{posicoes['h']['5']}</td>
+              <td>{posicoes['h']['6']}</td>
+              <td>{posicoes['h']['7']}</td>
+              <td>{posicoes['h']['8']}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   )

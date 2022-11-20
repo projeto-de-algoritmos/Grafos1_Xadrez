@@ -5,6 +5,6 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App boardWidth={550}/>
+    <App />
   </React.StrictMode>
 )
