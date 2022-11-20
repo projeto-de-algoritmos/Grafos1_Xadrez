@@ -10,10 +10,41 @@ export default function App({ boardWidth }) {
   const [moveSquares, setMoveSquares] = useState({});
   const [optionSquares, setOptionSquares] = useState({});
   const [rightClickedSquares, setRightClickedSquares] = useState({});
+  const [nomePeca, setNomePeca] = useState('Nenhuma peça selecionada!');
+  const [posicoes, setPosicoes] = useState({
+    a: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    b: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    c: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    d: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    e: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    f: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    g: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    h: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 }
+  })
+
+  let pecaSelecionada;
+  let nomesPecas = {
+    'p': 'Peão',
+    'k': 'Rei',
+    'q': 'Rainha',
+    'n': 'Cavalo',
+    'b': 'Bispo',
+    'r': 'Torre'
+  };
+  let novaMatriz = {
+    a: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    b: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    c: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    d: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    e: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    f: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    g: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
+    h: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 }
+  }
 
   function safeGameMutate(modify) {
     setGame((g) => {
-      const update = g ;
+      const update = g;
       modify(update);
       return update;
     });
@@ -47,7 +78,7 @@ export default function App({ boardWidth }) {
 
   function makeRandomMove() {
     const possibleMoves = game.moves();
-    if(game.isGameOver() || game.isDraw() || possibleMoves.length === 0)
+    if (game.isGameOver() || game.isDraw() || possibleMoves.length === 0)
       return;
     const randomIndex = Math.floor(Math.random() * possibleMoves.length);
     safeGameMutate((game) => {
@@ -57,25 +88,46 @@ export default function App({ boardWidth }) {
 
   //Caso o jogador clique em algum quadrado, movimentar as peças
   function onSquareClick(square) {
+    //Caso haja uma peça no quadrado selecionado
+    if (game.get(square)) {
+      pecaSelecionada = game.get(square).type;
+      setNomePeca(nomesPecas[pecaSelecionada]);
+      let posicoesValidas;
+
+      if (nomesPecas[pecaSelecionada] === 'Cavalo') {
+        posicoesValidas = game.moves({ square: square });
+        for (let i in posicoesValidas) {
+          let posicao = posicoesValidas[i];
+          novaMatriz[posicao[1]][posicao[2]] = 1;
+        }
+      } else {
+        posicoesValidas = game.moves({ square: square });
+        for (let i in posicoesValidas) {
+          let posicao = posicoesValidas[i];
+          novaMatriz[posicao[0]][posicao[1]] = 1;
+        }
+      }
+      setPosicoes(novaMatriz);
+    }
 
     //Função que altera a variável moveFrom para ter um "histórico" de onde o jogador clicou
-    function resetFirstMove(square){
+    function resetFirstMove(square) {
       setMoveFrom(square);
       getMoveOptions(square);
     }
 
     //Caso seja a primeira seleção da peça
-    if(!moveFrom){
+    if (!moveFrom) {
       resetFirstMove(square);
       return;
     }
 
     const gameCopy = game;
-    const move = gameCopy.move({from: moveFrom, to: square});
+    const move = gameCopy.move({ from: moveFrom, to: square });
     setGame(gameCopy);
 
     //Caso a movimentação seja inválida
-    if(move === null){
+    if (move === null) {
       console.log('Movimentação inválida!');
       resetFirstMove(square);
       return;
@@ -101,14 +153,10 @@ export default function App({ boardWidth }) {
               id="ClickToMove"
               animationDuration={200}
               arePiecesDraggable={false}
-              boardWidth={boardWidth}align content css não centraliza
+              boardWidth={boardWidth} align content css não centraliza
               position={game.fen()}
               onSquareClick={onSquareClick}
               onSquareRightClick={onSquareRightClick}
-              customBoardStyle={{
-                borderRadius: '4px',
-                boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)'
-              }}
               customSquareStyles={{
                 ...moveSquares,
                 ...optionSquares,
@@ -143,7 +191,112 @@ export default function App({ boardWidth }) {
               </button>
             </div>
           </div>
-          <div>Matriz</div>
+          <div>
+            <h2>{nomePeca}</h2>
+            <table>
+              <tbody>
+                <tr>
+                  <td> </td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>3</td>
+                  <td>4</td>
+                  <td>5</td>
+                  <td>6</td>
+                  <td>7</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td>a</td>
+                  <td>{posicoes['a']['1']}</td>
+                  <td>{posicoes['a']['2']}</td>
+                  <td>{posicoes['a']['3']}</td>
+                  <td>{posicoes['a']['4']}</td>
+                  <td>{posicoes['a']['5']}</td>
+                  <td>{posicoes['a']['6']}</td>
+                  <td>{posicoes['a']['7']}</td>
+                  <td>{posicoes['a']['8']}</td>
+                </tr>
+                <tr>
+                  <td>b</td>
+                  <td>{posicoes['b']['1']}</td>
+                  <td>{posicoes['b']['2']}</td>
+                  <td>{posicoes['b']['3']}</td>
+                  <td>{posicoes['b']['4']}</td>
+                  <td>{posicoes['b']['5']}</td>
+                  <td>{posicoes['b']['6']}</td>
+                  <td>{posicoes['b']['7']}</td>
+                  <td>{posicoes['b']['8']}</td>
+                </tr>
+                <tr>
+                  <td>c</td>
+                  <td>{posicoes['c']['1']}</td>
+                  <td>{posicoes['c']['2']}</td>
+                  <td>{posicoes['c']['3']}</td>
+                  <td>{posicoes['c']['4']}</td>
+                  <td>{posicoes['c']['5']}</td>
+                  <td>{posicoes['c']['6']}</td>
+                  <td>{posicoes['c']['7']}</td>
+                  <td>{posicoes['c']['8']}</td>
+                </tr>
+                <tr>
+                  <td>d</td>
+                  <td>{posicoes['d']['1']}</td>
+                  <td>{posicoes['d']['2']}</td>
+                  <td>{posicoes['d']['3']}</td>
+                  <td>{posicoes['d']['4']}</td>
+                  <td>{posicoes['d']['5']}</td>
+                  <td>{posicoes['d']['6']}</td>
+                  <td>{posicoes['d']['7']}</td>
+                  <td>{posicoes['d']['8']}</td>
+                </tr>
+                <tr>
+                  <td>e</td>
+                  <td>{posicoes['e']['1']}</td>
+                  <td>{posicoes['e']['2']}</td>
+                  <td>{posicoes['e']['3']}</td>
+                  <td>{posicoes['e']['4']}</td>
+                  <td>{posicoes['e']['5']}</td>
+                  <td>{posicoes['e']['6']}</td>
+                  <td>{posicoes['e']['7']}</td>
+                  <td>{posicoes['e']['8']}</td>
+                </tr>
+                <tr>
+                  <td>f</td>
+                  <td>{posicoes['f']['1']}</td>
+                  <td>{posicoes['f']['2']}</td>
+                  <td>{posicoes['f']['3']}</td>
+                  <td>{posicoes['f']['4']}</td>
+                  <td>{posicoes['f']['5']}</td>
+                  <td>{posicoes['f']['6']}</td>
+                  <td>{posicoes['f']['7']}</td>
+                  <td>{posicoes['f']['8']}</td>
+                </tr>
+                <tr>
+                  <td>g</td>
+                  <td>{posicoes['g']['1']}</td>
+                  <td>{posicoes['g']['2']}</td>
+                  <td>{posicoes['g']['3']}</td>
+                  <td>{posicoes['g']['4']}</td>
+                  <td>{posicoes['g']['5']}</td>
+                  <td>{posicoes['g']['6']}</td>
+                  <td>{posicoes['g']['7']}</td>
+                  <td>{posicoes['g']['8']}</td>
+                </tr>
+                <tr>
+                  <td>h</td>
+                  <td>{posicoes['h']['1']}</td>
+                  <td>{posicoes['h']['2']}</td>
+                  <td>{posicoes['h']['3']}</td>
+                  <td>{posicoes['h']['4']}</td>
+                  <td>{posicoes['h']['5']}</td>
+                  <td>{posicoes['h']['6']}</td>
+                  <td>{posicoes['h']['7']}</td>
+                  <td>{posicoes['h']['8']}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
