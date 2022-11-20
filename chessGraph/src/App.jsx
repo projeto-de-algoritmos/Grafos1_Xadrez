@@ -57,6 +57,7 @@ export default function App({ boardWidth }) {
 
   //Caso o jogador clique em algum quadrado, movimentar as peças
   function onSquareClick(square) {
+
     //Função que altera a variável moveFrom para ter um "histórico" de onde o jogador clicou
     function resetFirstMove(square){
       setMoveFrom(square);
@@ -72,7 +73,6 @@ export default function App({ boardWidth }) {
     const gameCopy = game;
     const move = gameCopy.move({from: moveFrom, to: square});
     setGame(gameCopy);
-    console.log(moveFrom, square);
 
     //Caso a movimentação seja inválida
     if(move === null){
@@ -81,8 +81,7 @@ export default function App({ boardWidth }) {
       return;
     }
 
-    console.log(move);
-    setTimeout(makeRandomMove, 300);
+    makeRandomMove();
     setMoveFrom('');
     setOptionSquares({});
   }
@@ -97,7 +96,7 @@ export default function App({ boardWidth }) {
     <div className="App">
       <Chessboard
         id="ClickToMove"
-        animationDuration={200}
+        animationDuration={300}
         arePiecesDraggable={false}
         boardWidth={boardWidth}
         position={game.fen()}
