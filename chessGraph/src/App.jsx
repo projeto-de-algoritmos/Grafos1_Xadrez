@@ -120,49 +120,58 @@ export default function App({ boardWidth }) {
 
   return (
     <div className="App">
-      <Chessboard
-        id="ClickToMove"
-        animationDuration={200}
-        arePiecesDraggable={false}
-        boardWidth={boardWidth}
-        position={game.fen()}
-        onSquareClick={onSquareClick}
-        onSquareRightClick={onSquareRightClick}
-        customBoardStyle={{
-          borderRadius: '4px',
-          boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)'
-        }}
-        customSquareStyles={{
-          ...moveSquares,
-          ...optionSquares,
-          ...rightClickedSquares
-        }}
-        ref={chessboardRef} />
-      <button
-        className="rc-button"
-        onClick={() => {
-          safeGameMutate((game) => {
-            game.reset();
-          });
-          chessboardRef.current.clearPremoves();
-          setMoveSquares({});
-          setRightClickedSquares({});
-        }}
-      >
-        reset
-      </button>
-      <button
-        className="rc-button"
-        onClick={() => {
-          safeGameMutate((game) => {
-            game.undo();
-          });
-          chessboardRef.current.clearPremoves();
-          setMoveSquares({});
-        }}
-      >
-        undo
-      </button>
+      <div className="screen">
+        <div className="game">
+          <div className="board">
+            <Chessboard
+              id="ClickToMove"
+              animationDuration={200}
+              arePiecesDraggable={false}
+              boardWidth={boardWidth}align content css não centraliza
+              position={game.fen()}
+              onSquareClick={onSquareClick}
+              onSquareRightClick={onSquareRightClick}
+              customBoardStyle={{
+                borderRadius: '4px',
+                boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)'
+              }}
+              customSquareStyles={{
+                ...moveSquares,
+                ...optionSquares,
+                ...rightClickedSquares
+              }}
+              ref={chessboardRef} />
+            <div className="buttons">
+              <button
+                className="rc-button"
+                onClick={() => {
+                  safeGameMutate((game) => {
+                    game.reset();
+                  });
+                  chessboardRef.current.clearPremoves();
+                  setMoveSquares({});
+                  setRightClickedSquares({});
+                }}
+              >
+                Reset
+              </button>
+              <button
+                className="rc-button"
+                onClick={() => {
+                  safeGameMutate((game) => {
+                    game.undo();
+                  });
+                  chessboardRef.current.clearPremoves();
+                  setMoveSquares({});
+                }}
+              >
+                Undo
+              </button>
+            </div>
+          </div>
+          <div>Matriz</div>
+        </div>
+      </div>
     </div>
   )
 }
