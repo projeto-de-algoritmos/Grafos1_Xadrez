@@ -48,7 +48,7 @@ export default function App({ boardWidth }) {
 
   //Função que movimenta uma peça no tabuleiro
   function makeAMove(move) {
-    const gameCopy = { ...game };
+    const gameCopy = game;
     const result = gameCopy.move(move);
     setGame(gameCopy);
     return result;
@@ -81,7 +81,7 @@ export default function App({ boardWidth }) {
     }
 
     // attempt to make move
-    const gameCopy = { ...game };
+    const gameCopy = game;
     const move = gameCopy.move({
       from: moveFrom,
       to: square,
