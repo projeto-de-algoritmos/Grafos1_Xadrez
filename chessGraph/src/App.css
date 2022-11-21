@@ -1,4 +1,86 @@
-/* .App {
-    width: 50%;
-    height: 50%;        
-} */
+.App {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.matrix {
+    font-size: 100%;
+    border: solid 1px;
+    border-color: black;
+    border-radius: 50px;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.table h2 {
+    font-size: 50px;
+}
+
+.table tbody {
+    display: flex;
+    flex-direction: column;
+}
+
+.table table td {
+    font-size: 35px;
+    font-weight: bold;
+}
+
+@media only screen and (max-width: 500px) {
+    .matrix {
+        margin-top: 50px;
+        padding: 2px;
+    }
+    .table h2 {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (max-width: 1470px) {
+    .App {
+        display: flex;
+        flex-direction: column;
+    }
+    .matrix {
+        margin-top: 50px;
+        padding: 3% 10% 3% 10%;
+    }
+}
+
+@media only screen and (max-width: 2200px) {
+    .matrix {
+        padding: 1% 5% 1% 5%;
+    }
+    .table table td {
+        padding: 18px;
+    }
+    .table h2 {
+        font-size: 28px;
+    }
+    .table table td {
+        font-size: 15px;
+    }
+}
+
+@media only screen and (min-width: 2200px) {
+    .matrix {
+        font-size: 250%;
+        padding: 1% 10% 1% 10%;
+    }
+    .table table td {
+        font-size: 80%;
+        padding: 30px;
+    }
+}
+
+@media only screen and (min-width: 6000px) {
+    .matrix {
+        font-size: 600%;
+    }
+}
