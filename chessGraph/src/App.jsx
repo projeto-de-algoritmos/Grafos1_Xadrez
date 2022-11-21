@@ -10,7 +10,6 @@ export default function App() {
   const [moveFrom, setMoveFrom] = useState('');
   const [moveSquares, setMoveSquares] = useState({});
   const [optionSquares, setOptionSquares] = useState({});
-  const [rightClickedSquares, setRightClickedSquares] = useState({});
   const [nomePeca, setNomePeca] = useState('Nenhuma peça selecionada!');
   const [posicoes, setPosicoes] = useState({
     a: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
@@ -23,7 +22,7 @@ export default function App() {
     h: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 }
   })
   const [boardSize, setBoardSize] = useState(window.innerWidth/2.5);
-
+  
   useEffect(() => {
     function handleBoardResize() {
       setBoardSize(window.innerWidth/2.5);
@@ -39,11 +38,11 @@ export default function App() {
   let pecaSelecionada;
   let nomesPecas = {
     'p': 'Peão',
-    'k': 'Rei',
-    'q': 'Rainha',
+    'K': 'Rei',
+    'Q': 'Rainha',
     'n': 'Cavalo',
-    'b': 'Bispo',
-    'r': 'Torre'
+    'B': 'Bispo',
+    'R': 'Torre'
   };
   let novaMatriz = {
     a: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
@@ -56,12 +55,10 @@ export default function App() {
     h: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 }
   }
 
-  function safeGameMutate(modify) {
-    setGame((g) => {
-      const update = g;
-      modify(update);
-      return update;
-    });
+  function blackTurnMove(move) {
+    if(game.turn() !== 'b')
+      return;
+    game.move(move);
   }
 
   function getMoveOptions(square) {
@@ -91,13 +88,14 @@ export default function App() {
   }
 
   function makeRandomMove() {
+    if(game.turn() === 'w'){
+      return;
+    }
     const possibleMoves = game.moves();
     if (game.isGameOver() || game.isDraw() || possibleMoves.length === 0)
       return;
     const randomIndex = Math.floor(Math.random() * possibleMoves.length);
-    safeGameMutate((game) => {
-      game.move(possibleMoves[randomIndex]);
-    });
+    blackTurnMove(possibleMoves[randomIndex]);
   }
 
   //Caso o jogador clique em algum quadrado, movimentar as peças
@@ -106,20 +104,11 @@ export default function App() {
     if (game.get(square)) {
       pecaSelecionada = game.get(square).type;
       setNomePeca(nomesPecas[pecaSelecionada]);
-      let posicoesValidas;
+      let posicoesValidas = game.moves({ square: square, verbose:true });
+      console.log(posicoesValidas);
 
-      if (nomesPecas[pecaSelecionada] === 'Cavalo') {
-        posicoesValidas = game.moves({ square: square });
-        for (let i in posicoesValidas) {
-          let posicao = posicoesValidas[i];
-          novaMatriz[posicao[1]][posicao[2]] = 1;
-        }
-      } else {
-        posicoesValidas = game.moves({ square: square });
-        for (let i in posicoesValidas) {
-          let posicao = posicoesValidas[i];
-          novaMatriz[posicao[0]][posicao[1]] = 1;
-        }
+      for (let i in posicoesValidas) {
+        novaMatriz[posicoesValidas[i]['to'][0]][posicoesValidas[i]['to'][1]] = 1;
       }
       setPosicoes(novaMatriz);
     }
@@ -146,15 +135,12 @@ export default function App() {
       resetFirstMove(square);
       return;
     }
-
+    
     makeRandomMove();
     setMoveFrom('');
     setOptionSquares({});
   }
 
-  function onSquareRightClick(square) {
-    console.log(square);
-  }
   // console.log(game.get('a2')); //Retorna a peça que está na posição clicada
   // console.log(game.moves({square: 'a3'})); //Retorna a lista de possíveis movimentos no quadrado selecionado
 
@@ -163,16 +149,14 @@ export default function App() {
       <div className="board">
         <Chessboard
           className="oi"
-          animationDuration={200}
+          animationDuration={300}
           boardWidth={boardSize}
           arePiecesDraggable={false}
           position={game.fen()}
           onSquareClick={onSquareClick}
-          onSquareRightClick={onSquareRightClick}
           customSquareStyles={{
             ...moveSquares,
             ...optionSquares,
-            ...rightClickedSquares
           }}
           ref={chessboardRef} />
       </div>
