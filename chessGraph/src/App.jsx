@@ -38,11 +38,11 @@ export default function App() {
   let pecaSelecionada;
   let nomesPecas = {
     'p': 'Peão',
-    'K': 'Rei',
-    'Q': 'Rainha',
+    'k': 'Rei',
+    'q': 'Rainha',
     'n': 'Cavalo',
-    'B': 'Bispo',
-    'R': 'Torre'
+    'b': 'Bispo',
+    'r': 'Torre'
   };
   let novaMatriz = {
     a: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0 },
